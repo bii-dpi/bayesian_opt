@@ -65,7 +65,7 @@ def load_all_ligands(threshold=3):
         output = load_ligand(active_path, threshold)
         features_list.append(output[0])
         adj_list.append(output[1])
-        labels.append(torch.FloatTensor([1]))
+        labels.append(torch.FloatTensor([0]))
 
     np.random.seed(12345)
     train_indices = np.random.choice(range(len(labels)), int(0.8 * len(labels)), replace=False)
@@ -78,10 +78,3 @@ def load_all_ligands(threshold=3):
             slice_list(adj_list, validation_indices),
             slice_list(labels, train_indices),
             slice_list(labels, validation_indices))
-
-
-def accuracy(output, labels):
-    preds = output.max(1)[1].type_as(labels)
-    correct = preds.eq(labels).double()
-    correct = correct.sum()
-    return correct / len(labels)
