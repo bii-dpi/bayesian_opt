@@ -8,7 +8,7 @@ import torch.optim as optim
 from utils import load_all_ligands
 from models import GCN
 
-def get_validation_loss(no_cuda=False,
+def get_validation_loss(no_cuda=True,
                         fastmode=True,
                         seed=42,
                         epochs=50,
