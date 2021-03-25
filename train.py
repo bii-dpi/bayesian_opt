@@ -8,6 +8,17 @@ import torch.optim as optim
 from utils import load_all_ligands
 from models import GCN
 
+from skopt.space import Real
+from skopt.utils import use_named_args
+
+
+# The list of hyper-parameters we want to optimize. For each one we define the
+# bounds, the corresponding scikit-learn parameter name, as well as how to
+# sample values from that dimension (`'log-uniform'` for the learning rate)
+space  = [Real(10**-5, 10**0, "log-uniform", name='lr'),
+          Real(10**-5, 10**0, "log-uniform", name='weight_decay')]
+
+@use_named_args(space)
 def get_validation_loss(no_cuda=True,
                         fastmode=True,
                         seed=42,

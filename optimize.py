@@ -3,6 +3,17 @@ import numpy as np
 from progressbar import progressbar
 from train import get_validation_loss
 
-for weight_decay in progressbar(np.linspace(0, 1, 10)):
-    for lr in np.linspace(0, 1, 10):
-        print(f"{weight_decay}, {lr}, {get_validation_loss(weight_decay=weight_decay, lr=lr)}")
+from skopt.space import Real
+from skopt.utils import use_named_args
+from skopt import gp_minimize
+
+space  = [Real(10**-5, 10**0, "log-uniform", name='learning_rate'),
+          Real(10**-5, 10**0, "log-uniform", name='weight_decay')]
+
+res_gp = gp_minimize(get_validation_loss, space, n_calls=50, random_state=0)
+
+print("Best score=%.4f" % res_gp.fun)
+
+from skopt.plots import plot_convergence
+
+plot_convergence(res_gp)
